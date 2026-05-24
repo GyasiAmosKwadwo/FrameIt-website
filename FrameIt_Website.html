@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FrameItGh — Frame Your World</title>
+  <title>FrameIt — Frame Your World</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap"
     rel="stylesheet">
@@ -944,6 +944,68 @@
 
     .gallery-item.is-clickable {
       cursor: zoom-in;
+    }
+
+    /* ── ASSET LIBRARY ── */
+    #asset-library {
+      background: var(--bg2);
+      padding: 80px 60px 40px;
+    }
+
+    .assets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .asset-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      border: 10px solid #0f0f19;
+      border-radius: 18px;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .asset-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201, 168, 76, 0.3);
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.45);
+    }
+
+    .asset-frame {
+      background: #0b0b10;
+      padding: 16px;
+      display: grid;
+      place-items: center;
+    }
+
+    .asset-frame img {
+      width: 100%;
+      height: 260px;
+      object-fit: contain;
+      object-position: center;
+      background: #0b0b10;
+      border-radius: 10px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .asset-frame {
+      background: #0b0b10;
+      padding: 18px;
+      display: grid;
+      place-items: center;
+    }
+
+    .asset-frame img {
+      width: 100%;
+      height: 260px;
+      object-fit: contain;
+      object-position: center;
+      background: #0b0b10;
+      border-radius: 10px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
     }
 
     /* ── INSPIRATION STRIP ── */
@@ -2286,7 +2348,7 @@
 
   <!-- ── NAVIGATION ── -->
   <nav id="navbar">
-    <a href="#" class="nav-logo">Frame<span>ItGh</span></a>
+    <a href="#" class="nav-logo">Frame<span>It</span></a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#customizer">Live Preview</a></li>
@@ -2680,6 +2742,10 @@
     </div>
   </section>
 
+  <section id="asset-library">
+    <div class="assets-grid reveal" id="assets-grid" aria-label="Framed asset preview wall"></div>
+  </section>
+
   <section id="inspo-strip">
     <div class="strip-title reveal">
       <small>More Inspiration</small>
@@ -2926,7 +2992,7 @@
       <p class="order-sub">Order in minutes via WhatsApp. No complicated forms, no waiting — just send us a message and
         we'll handle the rest.</p>
       <div class="order-actions">
-        <a href="https://wa.me/233592718321?text=Hello%20FrameItGh!%20I'd%20like%20to%20order%20a%20frame."
+        <a href="https://wa.me/233592718321?text=Hello%20FrameIt!%20I'd%20like%20to%20order%20a%20frame."
           class="whatsapp-btn" target="_blank">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path
@@ -2934,7 +3000,7 @@
           </svg>
           Order on WhatsApp
         </a>
-        <a href="mailto:frameitgh@gmail.com?subject=FrameItGh%20Order%20Inquiry&body=Hello%20FrameItGh%2C%0A%0AI%20would%20like%20to%20place%20an%20order.%20Please%20share%20the%20next%20steps."
+        <a href="mailto:FrameIt@gmail.com?subject=FrameIt%20Order%20Inquiry&body=Hello%20FrameIt%2C%0A%0AI%20would%20like%20to%20place%20an%20order.%20Please%20share%20the%20next%20steps."
           class="btn-secondary">📧 Email Us</a>
       </div>
     </div>
@@ -2944,7 +3010,7 @@
   <footer>
     <div class="footer-top">
       <div>
-        <a href="#" class="footer-logo">Frame<span>ItGh</span></a>
+        <a href="#" class="footer-logo">Frame<span>It</span></a>
         <p class="footer-about">Ghana's favourite frame studio. We turn your memories and favourite art into
           stunning framed pieces — delivered right to your door.</p>
       </div>
@@ -2972,7 +3038,7 @@
           <li><a href="#">WhatsApp Us</a></li>
           <li><a href="#">Instagram</a></li>
           <li><a
-              href="mailto:frameitgh@gmail.com?subject=FrameItGh%20General%20Inquiry&body=Hello%20FrameItGh%2C%0A%0AI%20would%20like%20to%20ask%20about%20your%20framing%20services.">Email
+              href="mailto:FrameIt@gmail.com?subject=FrameIt%20General%20Inquiry&body=Hello%20FrameIt%2C%0A%0AI%20would%20like%20to%20ask%20about%20your%20framing%20services.">Email
               Us</a></li>
           <li><a href="#">Nationwide Delivery</a></li>
         </ul>
@@ -3293,7 +3359,7 @@
 
       // Build WhatsApp order link
       const matText = (matToggle && matToggle.checked) ? "Yes" : "No";
-      const textMessage = `Hello FrameItGh! I designed a custom frame on your website:\n` +
+      const textMessage = `Hello FrameIt! I designed a custom frame on your website:\n` +
         `- Art/Photo: ${currentArtName}\n` +
         `- Size: ${currentSize}\n` +
         `- Frame Style: ${currentFrameStyle}\n` +
@@ -3308,6 +3374,65 @@
 
     // Initial call
     updateCustomizerPrice();
+
+    // Render the framed asset gallery dynamically
+    const assetFiles = [
+      "0278fa8b2a45eb1731e3a424362f8f28.jpg",
+      "04dcb5110dee60205ba821eecd9b59b5.jpg",
+      "1aedb7f9650ad0665e1172f1bb732cd3.jpg",
+      "1b732d82279581978d14400539522eef.jpg",
+      "1bb08fd13fbb0ca5de34a6daecb13981.jpg",
+      "1d29abb7786428fdcc046565ee985eeb.jpg",
+      "1f9edf2065882e482c4cf466f27b2651.jpg",
+      "2a7f6b8a254a2be1f8132196e65dcef3.jpg",
+      "2d4c8c3c289084948166f6c052c326fc.jpg",
+      "373de9b3e2a72262777e41321be5a815.jpg",
+      "3m77Hh4LVI6m6Q9NOp_w-g@2k.webp",
+      "43f42669e2f3515b1a304cc9db473c55.jpg",
+      "500c3a3c9ddbc02f76a4b5a0a8c936d8.jpg",
+      "557c96484263125927cdb6134db817b4.jpg",
+      "64faa7eb2cc91f27ca26d6c864f0ea65.jpg",
+      "6c8ab6ee223bbaefb6a4479ef13d2937.jpg",
+      "7bbea5b5408998ccbbfe5cf08aed80c1.jpg",
+      "8ab6acfcee1b3724525ddfc0951f3441.jpg",
+      "8dadbe6133cbe2f8227fcdf0b14e4cb2.jpg",
+      "91d29970d6b69d0a6e300f7b755865e8.jpg",
+      "ChatGPT Image May 23, 2026, 04_47_32 PM.png",
+      "Z0V7zM1AV1GpKCbEdgyeRg@2k.webp",
+      "a8463f1ca432d930be91fa16d6dd94fb.jpg",
+      "b0b7f81259d90e8c0b8f9e70ac58c695.jpg",
+      "b1b031e8a570f259b148648fb8b25c6f.jpg",
+      "b1zbroxuWgWZNxf63DBS8g@2k.webp",
+      "b54461c3917941cd971267d6df47ed3b.jpg",
+      "c561aa1bdf644e0065f020c2d7aefeaf.jpg",
+      "c5bccd115bae42a7feff2de2e53b1577.jpg",
+      "ceb7f4b3589b1ca69ceafcf9550de5a4.jpg",
+      "df4103ba9cb4f2187c3eaca5529a02b2.jpg",
+      "e422ffe362303ce926bb7192395adf2f.jpg",
+      "e5c1674e6526cc385e3d582e7edc0557.jpg",
+      "ed9680594a2f58aaade396e421ff849c.jpg",
+      "ee376026ef891038aaee9f0b0d0143ca.jpg",
+      "ef91653c9125ff79d84a291f633f4ac0.jpg",
+      "f67da65b51c46c8e2b7d49fe4b0d76e9.jpg",
+      "gallery_sunset.png",
+      "hero_collage_print.png",
+      "hero_photo_portrait.png",
+      "jwqdjlVKRCyoKA5qYdb95w@2k.webp"
+    ];
+
+    const assetsGrid = document.getElementById('assets-grid');
+    if (assetsGrid) {
+      assetsGrid.innerHTML = assetFiles.map(asset => {
+        const safeName = asset.replace(/%20/g, ' ');
+        return `
+          <div class="asset-card">
+            <div class="asset-frame">
+              <img src="assets/${asset}" alt="Framed asset" loading="lazy">
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
   </script>
 </body>
 
