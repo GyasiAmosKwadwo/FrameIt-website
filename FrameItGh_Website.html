@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FrameItGh — Frame Your World</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #0f0f1a;
+      --bg3: #141422;
+      --gold: #c9a84c;
+      --gold2: #f0c96e;
+      --gold-dim: rgba(201, 168, 76, 0.15);
+      --cream: #f5eed8;
+      --text: #e8e0cc;
+      --text-dim: rgba(232, 224, 204, 0.55);
+      --white: #ffffff;
+      --accent: #e8734a;
+      --accent2: #d4af37;
+      --glow: rgba(201, 168, 76, 0.25);
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+      mix-blend-mode: difference;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.15s ease;
+      opacity: 0.6;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 24px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      background: rgba(10, 10, 15, 0.7);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+      transition: all 0.4s ease;
+    }
+
+    nav.scrolled {
+      padding: 16px 60px;
+      background: rgba(10, 10, 15, 0.95);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--cream);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+      transform-origin: left;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--bg) !important;
+      padding: 10px 24px;
+      border-radius: 2px;
+      font-weight: 600 !important;
+      transition: all 0.3s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold2) !important;
+      transform: translateY(-1px);
+    }
+
+    .nav-cta::after {
+      display: none !important;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 60px 60px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(201, 168, 76, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(232, 115, 74, 0.06) 0%, transparent 50%),
+        linear-gradient(160deg, #0a0a0f 0%, #0f0f1a 50%, #0a0a12 100%);
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image: linear-gradient(rgba(201, 168, 76, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201, 168, 76, 0.5) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-eyebrow-line {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-eyebrow span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+      position: relative;
+    }
+
+    .hero-title em::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin-bottom: 48px;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--bg);
+      padding: 16px 36px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold2);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+      z-index: 0;
+    }
+
+    .btn-primary:hover::before {
+      transform: scaleX(1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(201, 168, 76, 0.3);
+    }
+
+    .btn-primary span,
+    .btn-primary svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--cream);
+      padding: 16px 36px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    /* ── FLOATING FRAMES VISUAL ── */
+    .hero-visual {
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 480px;
+      height: 540px;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.8s forwards;
+    }
+
+    .float-frame {
+      position: absolute;
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 168, 76, 0.2);
+    }
+
+    .float-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(201, 168, 76, 0.25);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    .frame1 {
+      width: 270px;
+      height: 270px;
+      right: 60px;
+      top: 40px;
+      animation: floatA 6s ease-in-out infinite;
+    }
+
+    .frame2 {
+      width: 210px;
+      height: 210px;
+      left: 20px;
+      top: 100px;
+      animation: floatB 7s ease-in-out infinite 1s;
+    }
+
+    .frame3 {
+      width: 180px;
+      height: 180px;
+      right: 20px;
+      bottom: 40px;
+      animation: floatC 5.5s ease-in-out infinite 0.5s;
+    }
+
+    .frame-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .frame-art {
+      width: 80%;
+      height: 60%;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .frame1 .frame-art {
+      background: linear-gradient(135deg, #c9a84c22 0%, #f0c96e44 50%, #c9a84c22 100%),
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(201, 168, 76, 0.05) 10px, rgba(201, 168, 76, 0.05) 20px);
+    }
+
+    .frame2 .frame-art {
+      background: linear-gradient(135deg, #e8734a22 0%, #ff9a6c44 50%, #e8734a22 100%),
+        repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(232, 115, 74, 0.08) 8px, rgba(232, 115, 74, 0.08) 16px);
+    }
+
+    .frame3 .frame-art {
+      background: linear-gradient(135deg, #4caf5022 0%, #81c78444 50%, #4caf5022 100%);
+    }
+
+    .frame-art-lines {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 12px;
+      gap: 6px;
+    }
+
+    .art-line {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 1px;
+    }
+
+    .frame-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      color: var(--gold);
+    }
+
+    .frame-badge {
+      position: absolute;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: 1px;
+      top: -8px;
+      right: -8px;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--bg2);
+      border-top: 1px solid rgba(201, 168, 76, 0.1);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+      padding: 28px 60px;
+      display: flex;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .stat-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 24px;
+      border-right: 1px solid rgba(201, 168, 76, 0.1);
+      opacity: 0;
+      animation: fadeUp 0.6s forwards;
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-item:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .stat-item:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .stat-item:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .stat-item:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ── SECTION COMMONS ── */
+    section {
+      padding: 100px 60px;
+      position: relative;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-tag-line {
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .section-tag span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      max-width: 520px;
+      font-weight: 300;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--bg2);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      margin-top: 64px;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .service-card {
+      background: var(--bg3);
+      padding: 44px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      cursor: default;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .service-card:hover {
+      background: #181828;
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-card::after {
+      content: attr(data-num);
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 900;
+      color: rgba(201, 168, 76, 0.06);
+      line-height: 1;
+      transition: color 0.4s;
+    }
+
+    .service-card:hover::after {
+      color: rgba(201, 168, 76, 0.12);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      margin-bottom: 28px;
+      font-size: 1.4rem;
+    }
+
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--cream);
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .service-price {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #process {
+      background: var(--bg);
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 64px;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--gold), var(--gold), transparent);
+      opacity: 0.2;
+    }
+
+    .step {
+      padding: 0 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .step-num {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .step:hover .step-num {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+      box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+      transform: scale(1.05);
+    }
+
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--cream);
+    }
+
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ── GALLERY WALL ── */
+    #gallery {
+      background: var(--bg2);
+      overflow: hidden;
+    }
+
+    .gallery-intro {
+      max-width: 600px;
+    }
+
+    .gallery-wall {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto;
+      gap: 8px;
+      margin-top: 64px;
+    }
+
+    .gallery-item {
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+      background: var(--bg3);
+      border: 1px solid rgba(201, 168, 76, 0.08);
+      aspect-ratio: 1;
+      transition: all 0.4s ease;
+      cursor: default;
+    }
+
+    .gallery-item.tall {
+      grid-row: span 2;
+      aspect-ratio: unset;
+    }
+
+    .gallery-item.wide {
+      grid-column: span 2;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.02);
+      z-index: 2;
+      border-color: rgba(201, 168, 76, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .gallery-art {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .g1 {
+      background: linear-gradient(145deg, #1a0a2e, #2d1b4e, #1a0a3e);
+    }
+
+    .g2 {
+      background: linear-gradient(145deg, #0a1a0a, #1a3a1a, #0a2a0a);
+    }
+
+    .g3 {
+      background: linear-gradient(145deg, #2e1a0a, #4e3020, #3e2010);
+    }
+
+    .g4 {
+      background: linear-gradient(145deg, #0a1a2e, #1a2e4e, #0a2040);
+    }
+
+    .g5 {
+      background: linear-gradient(145deg, #2e0a1a, #4e1a2e, #3e0a20);
+    }
+
+    .g6 {
+      background: linear-gradient(145deg, #1a1a0a, #3a3a1a, #2a2a0a);
+    }
+
+    .g7 {
+      background: linear-gradient(145deg, #0a2e2e, #1a4e4e, #0a3a3a);
+    }
+
+    .g8 {
+      background: linear-gradient(145deg, #2e2e0a, #4e4e1a, #3a3a0a);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 15, 0.8);
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-overlay-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    .gallery-art-decoration {
+      position: absolute;
+      inset: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1px;
+    }
+
+    .gallery-art-center {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gallery-art-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .gallery-art-lines-v {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 60px;
+    }
+
+    .gallery-art-lines-v div {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* ── PRICING ── */
+    #pricing {
+      background: var(--bg);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .price-card {
+      background: var(--bg2);
+      padding: 40px 32px;
+      border: 1px solid rgba(201, 168, 76, 0.08);
+      position: relative;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .price-card.featured {
+      background: linear-gradient(145deg, #1a1428, #0f0f1a);
+      border-color: rgba(201, 168, 76, 0.3);
+    }
+
+    .price-card.featured::before {
+      content: 'POPULAR';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      padding: 4px 10px;
+      border-radius: 1px;
+    }
+
+    .price-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      border-color: rgba(201, 168, 76, 0.2);
+    }
+
+    .price-card.featured:hover {
+      box-shadow: 0 24px 60px rgba(201, 168, 76, 0.15);
+    }
+
+    .price-size {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .price-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .price-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .price-amount sup {
+      font-size: 1.2rem;
+      vertical-align: super;
+      font-weight: 400;
+    }
+
+    .price-range {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+    }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .price-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .price-features li::before {
+      content: '→';
+      color: var(--gold);
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .price-btn {
+      display: block;
+      text-align: center;
+      margin-top: 32px;
+      padding: 14px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .price-btn-outline {
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      color: var(--gold);
+      background: transparent;
+    }
+
+    .price-btn-outline:hover {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+    }
+
+    .price-btn-fill {
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+    }
+
+    .price-btn-fill:hover {
+      background: var(--gold2);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+    }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials {
+      background: var(--bg2);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .testimonial {
+      background: var(--bg3);
+      padding: 40px 32px;
+      position: relative;
+      border: 1px solid rgba(201, 168, 76, 0.06);
+      transition: border-color 0.3s;
+    }
+
+    .testimonial:hover {
+      border-color: rgba(201, 168, 76, 0.2);
+    }
+
+    .testimonial-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--gold);
+      line-height: 0.5;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      color: var(--gold);
+      font-size: 1rem;
+    }
+
+    .author-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--cream);
+    }
+
+    .author-info {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 16px;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 0.8rem;
+    }
+
+    /* ── ORDER CTA ── */
+    #order {
+      background: var(--bg);
+      text-align: center;
+      padding: 120px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #order::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+    }
+
+    .order-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .order-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .order-sub {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: #25D366;
+      color: white;
+      padding: 18px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .whatsapp-btn:hover {
+      background: #20bb59;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(37, 211, 102, 0.3);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid rgba(201, 168, 76, 0.1);
+      padding: 60px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .footer-logo span {
+      color: var(--cream);
+    }
+
+    .footer-about {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .footer-col-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+      font-weight: 300;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+
+    .footer-copy strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      color: var(--text-dim);
+    }
+
+    .social-link:hover {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 {
+      transition-delay: 0.1s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: 0.2s;
+    }
+
+    .reveal-delay-3 {
+      transition-delay: 0.3s;
+    }
+
+    .reveal-delay-4 {
+      transition-delay: 0.4s;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes floatA {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-18px) rotate(-1deg);
+      }
+    }
+
+    @keyframes floatB {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(3deg);
+      }
+
+      50% {
+        transform: translateY(-14px) rotate(2deg);
+      }
+    }
+
+    @keyframes floatC {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(-1deg);
+      }
+
+      50% {
+        transform: translateY(-10px) rotate(-2deg);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    /* ── MOBILE NAV ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    /* ── GALLERY IMAGE EFFECT ── */
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .gallery-item:hover .gallery-img {
+      transform: scale(1.08);
+    }
+
+    /* ── INTERACTIVE CUSTOMIZER ── */
+    #customizer {
+      background: var(--bg3);
+      border-top: 1px solid rgba(201, 168, 76, 0.1);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .customizer-container {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 60px;
+      margin-top: 50px;
+      align-items: center;
+    }
+
+    .preview-wall {
+      background: #0d0d13;
+      border-radius: 8px;
+      padding: 60px 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 500px;
+      position: relative;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .preview-wall::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .customizer-frame {
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      max-width: 320px;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+    }
+
+    .frame-style-gold {
+      border: 16px solid #d4af37;
+      border-image: linear-gradient(135deg, #d4af37 0%, #f0c96e 50%, #c9a84c 100%) 16;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 0 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .frame-style-black {
+      border: 18px solid #141414;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 0 8px rgba(255, 255, 255, 0.05);
+    }
+
+    .frame-style-oak {
+      border: 18px solid #d2b48c;
+      border-image: repeating-linear-gradient(45deg, #c3a37a, #d2b48c 10px, #b09068 20px) 18;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .frame-style-walnut {
+      border: 18px solid #4a2c00;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .customizer-art-wrapper {
+      width: 100%;
+      height: 100%;
+      background: #faf9f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: padding 0.3s ease;
+      overflow: hidden;
+    }
+
+    .customizer-art-wrapper.has-mat {
+      padding: 24px;
+    }
+
+    .customizer-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .config-panel {
+      background: var(--bg2);
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      border-radius: 4px;
+      padding: 30px;
+    }
+
+    .config-group {
+      margin-bottom: 24px;
+    }
+
+    .config-label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    .config-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .config-btn {
+      background: transparent;
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      color: var(--text-dim);
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .config-btn.active,
+    .config-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .upload-zone {
+      border: 1px dashed rgba(201, 168, 76, 0.3);
+      border-radius: 4px;
+      padding: 16px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .upload-zone:hover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.02);
+    }
+
+    .upload-zone input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-text {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .upload-icon {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+      color: var(--gold);
+    }
+
+    .switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      border-radius: 2px;
+    }
+
+    .switch-container span {
+      font-size: 0.85rem;
+      color: var(--cream);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #333;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--cream);
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    .switch input:checked+.slider {
+      background-color: var(--gold);
+    }
+
+    .switch input:checked+.slider:before {
+      transform: translateX(20px);
+      background-color: var(--bg);
+    }
+
+    .customizer-pricing {
+      border-top: 1px solid rgba(201, 168, 76, 0.15);
+      margin-top: 28px;
+      padding-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .customizer-price-display {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold);
+    }
+
+    .customizer-price-display span {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-weight: 400;
+      margin-right: 2px;
+    }
+
+    .customizer-order-btn {
+      flex: 1;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 20px 24px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      section {
+        padding: 70px 24px;
+      }
+
+      #hero {
+        padding: 100px 24px 60px;
+        min-height: auto;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .stats-bar {
+        padding: 24px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .stat-item {
+        min-width: 40%;
+        border-right: none;
+        border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+        padding-bottom: 16px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-steps {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+
+      .process-steps::before {
+        display: none;
+      }
+
+      .gallery-wall {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .gallery-item.wide {
+        grid-column: span 1;
+      }
+
+      .gallery-item.tall {
+        grid-row: span 1;
+        aspect-ratio: 1;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .customizer-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .preview-wall {
+        padding: 35px 20px;
+        min-height: 420px;
+      }
+
+      body {
+        cursor: auto;
+      }
+
+      .cursor,
+      .cursor-ring {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ── NAVIGATION ── -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Frame<span>ItGh</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#customizer">Live Preview</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#order" class="nav-cta">Order Now</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>Ghana's Campus Art Studio</span>
+      </div>
+      <h1 class="hero-title">
+        Frame Your<br>
+        World in<br>
+        <em>Pure Gold</em>
+      </h1>
+      <p class="hero-sub">
+        Curated art prints &amp; personalised photo frames, beautifully laminated and delivered to your door.
+        Built for campus life. Made to last forever.
+      </p>
+      <div class="hero-actions">
+        <a href="#order" class="btn-primary">
+          <span>Order Your Frame</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </a>
+        <a href="#gallery" class="btn-secondary">View Gallery</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="float-frame frame1">
+        <div class="frame-badge">NEW</div>
+        <img src="assets/hero_print_abstract.png" alt="Art Print Frame"
+          style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      </div>
+      <div class="float-frame frame2">
+        <img src="assets/hero_photo_portrait.png" alt="Photo Frame"
+          style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      </div>
+      <div class="float-frame frame3">
+        <img src="assets/hero_collage_print.png" alt="Collage Frame"
+          style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">48h</div>
+      <div class="stat-label">Turnaround Time</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">5+</div>
+      <div class="stat-label">Frame Styles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Campus Delivery</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">⭐ 5.0</div>
+      <div class="stat-label">Customer Rating</div>
+    </div>
+  </div>
+
+  <!-- ── SERVICES ── -->
+  <section id="services">
+    <div class="reveal">
+      <div class="section-tag">
+        <div class="section-tag-line"></div><span>What We Offer</span>
+      </div>
+      <h2 class="section-title">Our <em>Signature</em><br>Services</h2>
+      <p class="section-sub">From curated wall art to your most treasured memories — every frame is made with care and
+        precision.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1" data-num="01">
+        <div class="service-icon">🎨</div>
+        <h3 class="service-name">Curated Art Prints</h3>
+        <p class="service-desc">Hand-selected, copyright-free artworks sourced from premium platforms. Printed on
+          high-quality photo paper, laminated, and elegantly framed.</p>
+        <span class="service-price">FROM GH₵ 60</span>
+      </div>
+      <div class="service-card reveal reveal-delay-2" data-num="02">
+        <div class="service-icon">📸</div>
+        <h3 class="service-name">Personal Photo Frames</h3>
+        <p class="service-desc">Send us your favourite photo — we'll transform it into a stunning framed keepsake.
+          Perfect for gifts, memories, and room décor.</p>
+        <span class="service-price">FROM GH₵ 80</span>
+      </div>
+      <div class="service-card reveal reveal-delay-3" data-num="03">
+        <div class="service-icon">🖼️</div>
+        <h3 class="service-name">Photo Collage Frames</h3>
+        <p class="service-desc">Combine 3–4 of your best moments into one beautifully designed collage, printed and
+          framed in A3 for maximum visual impact.</p>
+        <span class="service-price">FROM GH₵ 120</span>
+      </div>
+      <div class="service-card reveal reveal-delay-4" data-num="04">
+        <div class="service-icon">✨</div>
+        <h3 class="service-name">Quote + Photo Combo</h3>
+        <p class="service-desc">Your photo paired with a motivational quote, Bible verse, or custom text — typeset
+          beautifully and framed to inspire every day.</p>
+        <span class="service-price">FROM GH₵ 100</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── INTERACTIVE FRAME CUSTOMIZER ── -->
+  <section id="customizer">
+    <div class="reveal" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">
+        <div class="section-tag-line"></div><span>Interactive Studio</span>
+      </div>
+      <h2 class="section-title">Visualize <em>Your</em> Frame</h2>
+      <p class="section-sub" style="margin:0 auto">Select a template, choose a frame style, toggle a mat board, or
+        upload your own picture to preview your perfect frame wall art.</p>
+    </div>
+    <div class="customizer-container reveal">
+      <!-- Preview Area -->
+      <div class="preview-wall">
+        <div id="previewFrame" class="customizer-frame frame-style-gold">
+          <div id="previewArtWrapper" class="customizer-art-wrapper has-mat">
+            <img id="previewImg" src="assets/gallery_abstract.png" alt="Customizer Preview" class="customizer-img">
+          </div>
+        </div>
+      </div>
+      <!-- Configuration Panel -->
+      <div class="config-panel">
+        <!-- 1. Upload or Select -->
+        <div class="config-group">
+          <span class="config-label">1. Choose Art / Upload</span>
+          <div class="upload-zone">
+            <div class="upload-icon">📤</div>
+            <div class="upload-text">Drag &amp; drop or click to upload your photo</div>
+            <input type="file" id="customizer-upload" accept="image/*">
+          </div>
+          <div
+            style="text-align: center; margin: 12px 0; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-dim);">
+            — OR SELECT A TEMPLATE ART —</div>
+          <div class="config-options" id="art-templates">
+            <button class="config-btn active" data-src="assets/gallery_abstract.png"
+              data-name="Abstract Painting">Abstract</button>
+            <button class="config-btn" data-src="assets/gallery_nature.png" data-name="Monstera Leaf">Nature</button>
+            <button class="config-btn" data-src="assets/gallery_sunset.png"
+              data-name="Ghana Beach Sunset">Sunset</button>
+          </div>
+        </div>
+
+        <!-- 2. Select Frame Style -->
+        <div class="config-group">
+          <span class="config-label">2. Frame Style</span>
+          <div class="config-options" id="frame-styles">
+            <button class="config-btn active" data-style="gold" data-price-add="0">Luxury Gold</button>
+            <button class="config-btn" data-style="black" data-price-add="-10">Matte Black</button>
+            <button class="config-btn" data-style="oak" data-price-add="5">Natural Oak</button>
+            <button class="config-btn" data-style="walnut" data-price-add="5">Walnut Wood</button>
+          </div>
+        </div>
+
+        <!-- 3. Toggle Mat Board -->
+        <div class="config-group">
+          <span class="config-label">3. White Mat Board</span>
+          <div class="switch-container">
+            <span>Include border mat board border</span>
+            <label class="switch">
+              <input type="checkbox" id="mat-toggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 4. Select Size -->
+        <div class="config-group">
+          <span class="config-label">4. Select Size</span>
+          <div class="config-options" id="frame-sizes">
+            <button class="config-btn active" data-size="a4" data-base-price="80">A4 (Standard)</button>
+            <button class="config-btn" data-size="a3" data-base-price="120">A3 (Large)</button>
+            <button class="config-btn" data-size="collage" data-base-price="140">A3 Collage</button>
+          </div>
+        </div>
+
+        <!-- Price & Order Action -->
+        <div class="customizer-pricing">
+          <div class="customizer-price-display">
+            <span>GH₵</span><span id="price-val">80</span>
+          </div>
+          <a href="#" id="customizer-order-btn" class="btn-primary customizer-order-btn">
+            <span>Order This Frame</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section id="process">
+    <div class="reveal" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">
+        <div class="section-tag-line"></div><span>The Process</span>
+      </div>
+      <h2 class="section-title">Ready in <em>4 Simple</em> Steps</h2>
+      <p class="section-sub" style="margin:0 auto">Ordering is as easy as sending a WhatsApp message. Here's how it
+        works from start to finish.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">1</div>
+        <h4 class="step-title">Choose Your Frame</h4>
+        <p class="step-desc">Browse our styles or describe what you want. Send us your photo or pick an art style you
+          love.</p>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">2</div>
+        <h4 class="step-title">Send a Deposit</h4>
+        <p class="step-desc">We collect 50–70% upfront via Mobile Money. Secure, easy, and no work begins without your
+          confirmation.</p>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">3</div>
+        <h4 class="step-title">We Craft Your Frame</h4>
+        <p class="step-desc">Your image is printed on premium paper, laminated for durability, trimmed, and placed in a
+          beautiful frame.</p>
+      </div>
+      <div class="step reveal reveal-delay-4">
+        <div class="step-num">4</div>
+        <h4 class="step-title">Delivered On Campus</h4>
+        <p class="step-desc">Your frame is hand-delivered to you on campus within 24–48 hours. Pay the balance on
+          delivery.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ── -->
+  <section id="gallery">
+    <div class="gallery-intro reveal">
+      <div class="section-tag">
+        <div class="section-tag-line"></div><span>Gallery</span>
+      </div>
+      <h2 class="section-title">Every Frame<br>Tells a <em>Story</em></h2>
+      <p class="section-sub">A glimpse of what we create. Each piece is unique, personal, and made with intention.</p>
+    </div>
+    <div class="gallery-wall reveal">
+      <div class="gallery-item tall g1">
+        <img src="assets/gallery_abstract.png" alt="Abstract Art Print" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Abstract Art Print · A3</div>
+        </div>
+      </div>
+      <div class="gallery-item g2">
+        <img src="assets/gallery_nature.png" alt="Nature Print" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Nature Print · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item g3">
+        <img src="assets/gallery_sunset.png" alt="Personal Photo" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Personal Photo · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item wide g4">
+        <img src="assets/hero_collage_print.png" alt="Photo Collage" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Photo Collage · A3</div>
+        </div>
+      </div>
+      <div class="gallery-item g5">
+        <img src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80"
+          alt="Quote Combo" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Quote Combo · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item g6">
+        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80"
+          alt="City Art" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">City Art · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item g7">
+        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=80"
+          alt="Minimal Print" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Minimal Print · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item g8">
+        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+          alt="Gold Edition" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Gold Edition · A4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRICING ── -->
+  <section id="pricing">
+    <div class="reveal" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">
+        <div class="section-tag-line"></div><span>Pricing</span>
+      </div>
+      <h2 class="section-title">Transparent, <em>Fair</em> Pricing</h2>
+      <p class="section-sub" style="margin:0 auto">No hidden fees. What you see is what you pay — always.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal reveal-delay-1">
+        <div class="price-size">A4 · Standard</div>
+        <div class="price-name">Art Print Frame</div>
+        <div class="price-amount"><sup>GH₵</sup>60</div>
+        <div class="price-range">— to GH₵ 80</div>
+        <ul class="price-features">
+          <li>High-resolution print</li>
+          <li>Premium photo paper</li>
+          <li>Laminated finish</li>
+          <li>Elegant A4 frame</li>
+          <li>Campus delivery</li>
+        </ul>
+        <a href="#order" class="price-btn price-btn-outline">Order Now</a>
+      </div>
+      <div class="price-card featured reveal reveal-delay-2">
+        <div class="price-size">A4 · Personalised</div>
+        <div class="price-name">Photo Frame</div>
+        <div class="price-amount"><sup>GH₵</sup>80</div>
+        <div class="price-range">— to GH₵ 100</div>
+        <ul class="price-features">
+          <li>Your own photo</li>
+          <li>Enhanced &amp; colour-corrected</li>
+          <li>Laminated finish</li>
+          <li>Elegant A4 frame</li>
+          <li>Campus delivery</li>
+        </ul>
+        <a href="#order" class="price-btn price-btn-fill">Order Now</a>
+      </div>
+      <div class="price-card reveal reveal-delay-3">
+        <div class="price-size">A3 · Multi-Photo</div>
+        <div class="price-name">Collage Frame</div>
+        <div class="price-amount"><sup>GH₵</sup>120</div>
+        <div class="price-range">— to GH₵ 150</div>
+        <ul class="price-features">
+          <li>3–4 photos combined</li>
+          <li>Custom layout design</li>
+          <li>Laminated finish</li>
+          <li>Large A3 frame</li>
+          <li>Campus delivery</li>
+        </ul>
+        <a href="#order" class="price-btn price-btn-outline">Order Now</a>
+      </div>
+      <div class="price-card reveal reveal-delay-4">
+        <div class="price-size">A4 · Premium</div>
+        <div class="price-name">Quote + Photo</div>
+        <div class="price-amount"><sup>GH₵</sup>100</div>
+        <div class="price-range">— to GH₵ 130</div>
+        <ul class="price-features">
+          <li>Photo + custom quote</li>
+          <li>Beautiful typography</li>
+          <li>Laminated finish</li>
+          <li>Elegant A4 frame</li>
+          <li>Campus delivery</li>
+        </ul>
+        <a href="#order" class="price-btn price-btn-outline">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TESTIMONIALS ── -->
+  <section id="testimonials">
+    <div class="reveal">
+      <div class="section-tag">
+        <div class="section-tag-line"></div><span>Reviews</span>
+      </div>
+      <h2 class="section-title">What Our <em>Customers</em><br>Are Saying</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial reveal reveal-delay-1">
+        <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span></div>
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">I sent my graduation photo and the result was absolutely stunning. The lamination is
+          smooth, the frame is solid, and it arrived the next day. My room looks incredible now.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <div class="author-name">Abena K.</div>
+            <div class="author-info">Level 300 · Business School</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal reveal-delay-2">
+        <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span></div>
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">Got the Quote + Photo combo for my girlfriend's birthday. She cried happy tears. The
+          quality is premium — way better than what I expected for the price. 10/10 would recommend.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">K</div>
+          <div>
+            <div class="author-name">Kofi M.</div>
+            <div class="author-info">Level 200 · Engineering</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal reveal-delay-3">
+        <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span></div>
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">Ordered a collage of my friends and me. The layout was designed so tastefully — I
+          didn't even have to ask for anything specific. Super fast delivery too. Already ordering a second one!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">E</div>
+          <div>
+            <div class="author-name">Efua A.</div>
+            <div class="author-info">Level 400 · Social Sciences</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ORDER CTA ── -->
+  <section id="order">
+    <div class="reveal">
+      <h2 class="order-title">Ready to <em>Frame</em><br>Your World?</h2>
+      <p class="order-sub">Order in minutes via WhatsApp. No complicated forms, no waiting — just send us a message and
+        we'll handle the rest.</p>
+      <div class="order-actions">
+        <a href="https://wa.me/233XXXXXXXXX?text=Hello%20FrameItGh!%20I'd%20like%20to%20order%20a%20frame."
+          class="whatsapp-btn" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg>
+          Order on WhatsApp
+        </a>
+        <a href="mailto:frameitgh@gmail.com" class="btn-secondary">📧 Email Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <a href="#" class="footer-logo">Frame<span>ItGh</span></a>
+        <p class="footer-about">Ghana's favourite campus art studio. We turn your memories and favourite art into
+          stunning framed pieces — delivered right to your door.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-links">
+          <li><a href="#services">Art Print Frames</a></li>
+          <li><a href="#services">Personal Photo Frames</a></li>
+          <li><a href="#services">Collage Frames</a></li>
+          <li><a href="#services">Quote + Photo Combo</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="#process">How It Works</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="#">WhatsApp Us</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Email Us</a></li>
+          <li><a href="#">Campus Delivery</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 <strong>FrameItGh</strong>. All rights reserved. Crafted with ❤️ in Ghana.</p>
+      <div class="footer-social">
+        <a href="#" class="social-link" title="Instagram">📸</a>
+        <a href="#" class="social-link" title="WhatsApp">💬</a>
+        <a href="#" class="social-link" title="TikTok">🎵</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX - 6 + 'px';
+      cursor.style.top = mouseY - 6 + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX - 20) * 0.12;
+      ringY += (mouseY - ringY - 20) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2)';
+        ring.style.transform = 'scale(1.5)';
+        ring.style.opacity = '0.3';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.transform = 'scale(1)';
+        ring.style.opacity = '0.6';
+      });
+    });
+
+    // Nav scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Hamburger menu
+    function toggleMenu() {
+      const links = document.querySelector('.nav-links');
+      if (links.style.display === 'flex') {
+        links.style.display = 'none';
+      } else {
+        links.style.cssText = 'display:flex; flex-direction:column; position:fixed; top:70px; left:0; right:0; background:rgba(10,10,15,0.98); padding:24px 24px 32px; gap:20px; border-bottom:1px solid rgba(201,168,76,0.2); z-index:99;';
+      }
+    }
+
+    // Close menu on link click (mobile)
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => {
+        const links = document.querySelector('.nav-links');
+        if (window.innerWidth <= 900) links.style.display = 'none';
+      });
+    });
+
+    // Stats count-up animation
+    function animateCount(el, target, suffix = '') {
+      let current = 0;
+      const step = target / 40;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = (Number.isInteger(target) ? Math.floor(current) : current.toFixed(1)) + suffix;
+        if (current >= target) clearInterval(timer);
+      }, 30);
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+
+    // ── INTERACTIVE CUSTOMIZER LOGIC ──
+    const customizerUpload = document.getElementById('customizer-upload');
+    const previewImg = document.getElementById('previewImg');
+    const previewFrame = document.getElementById('previewFrame');
+    const previewArtWrapper = document.getElementById('previewArtWrapper');
+    const matToggle = document.getElementById('mat-toggle');
+    const priceVal = document.getElementById('price-val');
+    const customizerOrderBtn = document.getElementById('customizer-order-btn');
+
+    let currentArtName = "Abstract Painting";
+    let currentFrameStyle = "Luxury Gold";
+    let currentSize = "A4 (Standard)";
+    let basePrice = 80;
+    let stylePriceAdd = 0;
+    let matPriceAdd = 10; // Checked by default
+    let isUploaded = false;
+
+    // Image Upload handler
+    if (customizerUpload) {
+      customizerUpload.addEventListener('change', function (e) {
+        if (e.target.files && e.target.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (evt) {
+            previewImg.src = evt.target.result;
+            currentArtName = "My Uploaded Photo";
+            isUploaded = true;
+
+            // Remove active class from template buttons
+            document.querySelectorAll('#art-templates .config-btn').forEach(btn => btn.classList.remove('active'));
+            updateCustomizerPrice();
+          };
+          reader.readAsDataURL(e.target.files[0]);
+        }
+      });
+    }
+
+    // Template select handler
+    document.querySelectorAll('#art-templates .config-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('#art-templates .config-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        previewImg.src = this.getAttribute('data-src');
+        currentArtName = this.getAttribute('data-name');
+        isUploaded = false;
+        if (customizerUpload) customizerUpload.value = '';
+        updateCustomizerPrice();
+      });
+    });
+
+    // Frame Style handler
+    document.querySelectorAll('#frame-styles .config-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('#frame-styles .config-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        const newStyle = this.getAttribute('data-style');
+        if (previewFrame) previewFrame.className = `customizer-frame frame-style-${newStyle}`;
+        currentFrameStyle = this.textContent.trim();
+        stylePriceAdd = parseInt(this.getAttribute('data-price-add'), 10);
+        updateCustomizerPrice();
+      });
+    });
+
+    // Mat Board handler
+    if (matToggle) {
+      matToggle.addEventListener('change', function () {
+        if (this.checked) {
+          if (previewArtWrapper) previewArtWrapper.classList.add('has-mat');
+          matPriceAdd = 10;
+        } else {
+          if (previewArtWrapper) previewArtWrapper.classList.remove('has-mat');
+          matPriceAdd = 0;
+        }
+        updateCustomizerPrice();
+      });
+    }
+
+    // Frame Size handler
+    document.querySelectorAll('#frame-sizes .config-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('#frame-sizes .config-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        currentSize = this.textContent.trim();
+        basePrice = parseInt(this.getAttribute('data-base-price'), 10);
+        updateCustomizerPrice();
+      });
+    });
+
+    // Update Price and Order Button link
+    function updateCustomizerPrice() {
+      // If it's custom uploaded photo, add GH₵ 20 for personalization print service
+      const personalizationCost = isUploaded ? 20 : 0;
+      const totalPrice = basePrice + stylePriceAdd + matPriceAdd + personalizationCost;
+      if (priceVal) priceVal.textContent = totalPrice;
+
+      // Build WhatsApp order link
+      const matText = (matToggle && matToggle.checked) ? "Yes" : "No";
+      const textMessage = `Hello FrameItGh! I designed a custom frame on your website:\n` +
+        `- Art/Photo: ${currentArtName}\n` +
+        `- Size: ${currentSize}\n` +
+        `- Frame Style: ${currentFrameStyle}\n` +
+        `- White Mat Board: ${matText}\n` +
+        `- Estimated Price: GH₵ ${totalPrice}\n` +
+        `I'd like to proceed with my order!`;
+
+      if (customizerOrderBtn) {
+        customizerOrderBtn.href = `https://wa.me/233592718321=${encodeURIComponent(textMessage)}`;
+      }
+    }
+
+    // Initial call
+    updateCustomizerPrice();
+  </script>
+</body>
+
+</html>
