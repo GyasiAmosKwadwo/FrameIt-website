@@ -181,15 +181,26 @@
       position: relative;
       overflow: hidden;
       padding: 120px 60px 60px;
+      isolation: isolate;
     }
 
     .hero-bg {
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(201, 168, 76, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(232, 115, 74, 0.06) 0%, transparent 50%),
-        linear-gradient(160deg, #0a0a0f 0%, #0f0f1a 50%, #0a0a12 100%);
+        url('assets/e422ffe362303ce926bb7192395adf2f.jpg') center 42% / cover no-repeat;
+      transform: scale(1.03);
+      filter: saturate(0.95) contrast(1.06);
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 72% 40%, rgba(201, 168, 76, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 20% 70%, rgba(232, 115, 74, 0.12) 0%, transparent 58%),
+        linear-gradient(105deg, rgba(7, 7, 11, 0.95) 0%, rgba(7, 7, 11, 0.84) 42%, rgba(8, 8, 12, 0.58) 65%, rgba(8, 8, 12, 0.86) 100%);
     }
 
     .hero-grid {
@@ -205,6 +216,7 @@
       position: relative;
       z-index: 2;
       max-width: 680px;
+      text-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
     }
 
     .hero-eyebrow {
@@ -766,6 +778,7 @@
       position: relative;
       background: var(--bg3);
       border: 1px solid rgba(201, 168, 76, 0.08);
+      padding: 0;
       aspect-ratio: 1;
       transition: all 0.4s ease;
       cursor: default;
@@ -785,6 +798,15 @@
       z-index: 2;
       border-color: rgba(201, 168, 76, 0.3);
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(201, 168, 76, 0.22);
+      pointer-events: none;
+      z-index: 2;
     }
 
     .gallery-art {
@@ -886,6 +908,441 @@
     .gallery-art-lines-v div {
       height: 1px;
       background: rgba(255, 255, 255, 0.12);
+    }
+
+    .gallery-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .gallery-filter {
+      border: 1px solid rgba(201, 168, 76, 0.26);
+      background: transparent;
+      color: var(--text-dim);
+      padding: 10px 16px;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .gallery-filter:hover,
+    .gallery-filter.active {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .gallery-item.hidden {
+      display: none;
+    }
+
+    .gallery-item.is-clickable {
+      cursor: zoom-in;
+    }
+
+    /* ── INSPIRATION STRIP ── */
+    #inspo-strip {
+      background: var(--bg);
+      padding-top: 70px;
+      padding-bottom: 70px;
+      border-top: 1px solid rgba(201, 168, 76, 0.1);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+      overflow: hidden;
+    }
+
+    .strip-title {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .strip-title small {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-size: 0.68rem;
+      margin-bottom: 10px;
+    }
+
+    .strip-title h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.2vw, 2.7rem);
+      line-height: 1.15;
+      color: var(--cream);
+    }
+
+    .strip-viewport {
+      position: relative;
+      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+
+    .strip-track {
+      display: flex;
+      width: max-content;
+      gap: 14px;
+      animation: stripMove 38s linear infinite;
+      padding-right: 14px;
+    }
+
+    .strip-viewport:hover .strip-track {
+      animation-play-state: paused;
+    }
+
+    .strip-item {
+      width: 170px;
+      height: 240px;
+      border: 1px solid rgba(201, 168, 76, 0.14);
+      overflow: hidden;
+      border-radius: 3px;
+      background: var(--bg3);
+      flex-shrink: 0;
+      padding: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      transform: perspective(900px) rotateY(-2deg);
+      transition: transform 0.35s ease, border-color 0.35s ease;
+    }
+
+    .strip-item:hover {
+      transform: perspective(900px) rotateY(0deg) translateY(-3px);
+      border-color: rgba(201, 168, 76, 0.35);
+    }
+
+    .strip-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: transparent;
+      border: 1px solid rgba(201, 168, 76, 0.16);
+    }
+
+    @keyframes stripMove {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ── BEFORE/AFTER COMPARE ── */
+    #compare {
+      background: var(--bg2);
+    }
+
+    .compare-wrap {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 36px;
+      align-items: start;
+    }
+
+    .compare-stage {
+      position: relative;
+      --compare-pos: 50%;
+      width: 100%;
+      aspect-ratio: 5 / 4;
+      border: 1px solid rgba(201, 168, 76, 0.16);
+      overflow: hidden;
+      border-radius: 4px;
+      background: var(--bg3);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .compare-stage::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(201, 168, 76, 0.24);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 2;
+      mix-blend-mode: screen;
+    }
+
+    .compare-base,
+    .compare-top {
+      position: absolute;
+      inset: 0;
+    }
+
+    .compare-base img,
+    .compare-top img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #07070e;
+      transform: scale(1.01);
+    }
+
+    .compare-base img {
+      filter: grayscale(0.85) brightness(0.7) contrast(0.88);
+    }
+
+    .compare-top img {
+      filter: saturate(1.08) contrast(1.05);
+    }
+
+    .compare-top {
+      width: 100%;
+      clip-path: inset(0 calc(100% - var(--compare-pos)) 0 0);
+    }
+
+    .compare-handle {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 44px;
+      height: 100%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .compare-handle::before {
+      content: '⇆';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(10, 10, 15, 0.85);
+      border: 1px solid rgba(201, 168, 76, 0.8);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.5);
+    }
+
+    .compare-handle::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background: rgba(201, 168, 76, 0.85);
+      box-shadow: 0 0 16px rgba(201, 168, 76, 0.35);
+    }
+
+    .compare-range {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: ew-resize;
+    }
+
+    .compare-labels {
+      position: absolute;
+      inset: auto 0 16px 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 18px;
+      pointer-events: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .compare-labels span {
+      background: rgba(10, 10, 15, 0.75);
+      color: var(--cream);
+      border: 1px solid rgba(201, 168, 76, 0.24);
+      padding: 6px 10px;
+      border-radius: 2px;
+    }
+
+    .compare-note {
+      background: linear-gradient(160deg, #151521 0%, #11111b 100%);
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      padding: 30px 24px;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .compare-note h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--cream);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .compare-note p {
+      color: var(--text-dim);
+      line-height: 1.7;
+      font-size: 0.92rem;
+      margin-bottom: 18px;
+    }
+
+    .compare-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .compare-points li {
+      font-size: 0.83rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .compare-points li::before {
+      content: '✓';
+      color: var(--gold);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .compare-mini-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .compare-mini-card {
+      border: 1px solid rgba(201, 168, 76, 0.16);
+      background: #0f0f18;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .compare-mini-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .compare-mini-card span {
+      display: block;
+      padding: 8px 9px 10px;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 3, 7, 0.92);
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 26px;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-content {
+      width: min(1040px, 95vw);
+      max-height: 90vh;
+      background: var(--bg2);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      display: grid;
+      grid-template-columns: 1fr;
+      overflow: hidden;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .lightbox-image-wrap {
+      background: #06060c;
+      min-height: 420px;
+    }
+
+    .lightbox-image {
+      width: 100%;
+      height: min(74vh, 820px);
+      object-fit: contain;
+      display: block;
+      background: #06060c;
+    }
+
+    .lightbox-meta {
+      padding: 18px 20px;
+      border-top: 1px solid rgba(201, 168, 76, 0.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lightbox-caption {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--cream);
+    }
+
+    .lightbox-count {
+      font-family: 'Space Mono', monospace;
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .lightbox-btn,
+    .lightbox-close {
+      position: absolute;
+      top: 16px;
+      width: 38px;
+      height: 38px;
+      border-radius: 2px;
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      background: rgba(10, 10, 15, 0.75);
+      color: var(--gold);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lightbox-btn:hover,
+    .lightbox-close:hover {
+      background: rgba(201, 168, 76, 0.15);
+      border-color: var(--gold);
+    }
+
+    .lightbox-close {
+      right: 16px;
+    }
+
+    .lightbox-prev {
+      left: 16px;
+    }
+
+    .lightbox-next {
+      left: 60px;
     }
 
     /* ── PRICING ── */
@@ -1264,28 +1721,6 @@
       color: var(--gold);
     }
 
-    .footer-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      font-weight: 300;
-    }
-
-    .footer-copy strong {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 12px;
-    }
-
     .social-link {
       width: 36px;
       height: 36px;
@@ -1427,6 +1862,8 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      background: #0a0a10;
+      border: none;
       transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
@@ -1781,15 +2218,48 @@
         grid-template-columns: 1fr 1fr;
       }
 
-      .footer-bottom {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-      }
-
       .customizer-container {
         grid-template-columns: 1fr;
         gap: 40px;
+      }
+
+      .gallery-controls {
+        gap: 8px;
+      }
+
+      .gallery-filter {
+        font-size: 0.68rem;
+        padding: 9px 12px;
+      }
+
+      .strip-item {
+        width: 130px;
+        height: 180px;
+      }
+
+      .compare-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .compare-stage {
+        aspect-ratio: 4 / 5;
+      }
+
+      .compare-mini-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .lightbox {
+        padding: 12px;
+      }
+
+      .lightbox-image {
+        height: min(66vh, 560px);
+      }
+
+      .lightbox-meta {
+        flex-direction: column;
+        align-items: flex-start;
       }
 
       .preview-wall {
@@ -1838,7 +2308,7 @@
     <div class="hero-content">
       <div class="hero-eyebrow">
         <div class="hero-eyebrow-line"></div>
-        <span>Ghana's Campus Art Studio</span>
+        <span>Ghana's Premium Frame Studio</span>
       </div>
       <h1 class="hero-title">
         Frame Your<br>
@@ -1847,7 +2317,7 @@
       </h1>
       <p class="hero-sub">
         Curated art prints &amp; personalised photo frames, beautifully laminated and delivered to your door.
-        Built for campus life. Made to last forever.
+        Made for homes, offices, gifts, and every story worth framing.
       </p>
       <div class="hero-actions">
         <a href="#order" class="btn-primary">
@@ -1863,7 +2333,7 @@
     <div class="hero-visual">
       <div class="float-frame frame1">
         <div class="frame-badge">NEW</div>
-        <img src="assets/hero_print_abstract.png" alt="Art Print Frame"
+        <img src="assets/df4103ba9cb4f2187c3eaca5529a02b2.jpg" alt="Art Print Frame"
           style="width: 100%; height: 100%; object-fit: cover; display: block;">
       </div>
       <div class="float-frame frame2">
@@ -1889,7 +2359,7 @@
     </div>
     <div class="stat-item">
       <div class="stat-num">100%</div>
-      <div class="stat-label">Campus Delivery</div>
+      <div class="stat-label">Nationwide Delivery</div>
     </div>
     <div class="stat-item">
       <div class="stat-num">⭐ 5.0</div>
@@ -1954,7 +2424,8 @@
       <div class="preview-wall">
         <div id="previewFrame" class="customizer-frame frame-style-gold">
           <div id="previewArtWrapper" class="customizer-art-wrapper has-mat">
-            <img id="previewImg" src="assets/gallery_abstract.png" alt="Customizer Preview" class="customizer-img">
+            <img id="previewImg" src="assets/43f42669e2f3515b1a304cc9db473c55.jpg" alt="Customizer Preview"
+              class="customizer-img">
           </div>
         </div>
       </div>
@@ -1972,9 +2443,10 @@
             style="text-align: center; margin: 12px 0; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-dim);">
             — OR SELECT A TEMPLATE ART —</div>
           <div class="config-options" id="art-templates">
-            <button class="config-btn active" data-src="assets/gallery_abstract.png"
-              data-name="Abstract Painting">Abstract</button>
-            <button class="config-btn" data-src="assets/gallery_nature.png" data-name="Monstera Leaf">Nature</button>
+            <button class="config-btn active" data-src="assets/43f42669e2f3515b1a304cc9db473c55.jpg"
+              data-name="Tropical Sunset Art">Tropical</button>
+            <button class="config-btn" data-src="assets/7bbea5b5408998ccbbfe5cf08aed80c1.jpg"
+              data-name="Monstera Leaf">Nature</button>
             <button class="config-btn" data-src="assets/gallery_sunset.png"
               data-name="Ghana Beach Sunset">Sunset</button>
           </div>
@@ -2057,9 +2529,9 @@
       </div>
       <div class="step reveal reveal-delay-4">
         <div class="step-num">4</div>
-        <h4 class="step-title">Delivered On Campus</h4>
-        <p class="step-desc">Your frame is hand-delivered to you on campus within 24–48 hours. Pay the balance on
-          delivery.</p>
+        <h4 class="step-title">Delivered to Your Door</h4>
+        <p class="step-desc">Your frame is hand-delivered within 24–48 hours in Accra, with arranged delivery across
+          Ghana. Pay the balance on delivery.</p>
       </div>
     </div>
   </section>
@@ -2071,61 +2543,256 @@
         <div class="section-tag-line"></div><span>Gallery</span>
       </div>
       <h2 class="section-title">Every Frame<br>Tells a <em>Story</em></h2>
-      <p class="section-sub">A glimpse of what we create. Each piece is unique, personal, and made with intention.</p>
+      <p class="section-sub">A glimpse of what we create. Premium quality frames for homes, offices, celebrations, and
+        gifts.</p>
+      <div class="gallery-controls" id="gallery-controls">
+        <button class="gallery-filter active" data-filter="all">All Works</button>
+        <button class="gallery-filter" data-filter="art">Art Prints</button>
+        <button class="gallery-filter" data-filter="personal">Personal Photos</button>
+        <button class="gallery-filter" data-filter="collage">Collage</button>
+        <button class="gallery-filter" data-filter="quote">Quote + Text</button>
+      </div>
     </div>
-    <div class="gallery-wall reveal">
-      <div class="gallery-item tall g1">
-        <img src="assets/gallery_abstract.png" alt="Abstract Art Print" class="gallery-img">
+    <div class="gallery-wall reveal" id="gallery-wall">
+      <div class="gallery-item tall g1 is-clickable" data-category="art" data-title="Monochrome Rose Print" data-size="A3">
+        <img src="assets/ef91653c9125ff79d84a291f633f4ac0.jpg" alt="Monochrome Rose Print" class="gallery-img">
         <div class="gallery-overlay">
-          <div class="gallery-overlay-text">Abstract Art Print · A3</div>
+          <div class="gallery-overlay-text">Monochrome Rose · A3</div>
         </div>
       </div>
-      <div class="gallery-item g2">
-        <img src="assets/gallery_nature.png" alt="Nature Print" class="gallery-img">
+      <div class="gallery-item g2 is-clickable" data-category="art" data-title="Nature Print" data-size="A4">
+        <img src="assets/7bbea5b5408998ccbbfe5cf08aed80c1.jpg" alt="Nature Print" class="gallery-img">
         <div class="gallery-overlay">
           <div class="gallery-overlay-text">Nature Print · A4</div>
         </div>
       </div>
-      <div class="gallery-item g3">
+      <div class="gallery-item g3 is-clickable" data-category="personal" data-title="Sunset Portrait" data-size="A4">
         <img src="assets/gallery_sunset.png" alt="Personal Photo" class="gallery-img">
         <div class="gallery-overlay">
           <div class="gallery-overlay-text">Personal Photo · A4</div>
         </div>
       </div>
-      <div class="gallery-item wide g4">
+      <div class="gallery-item wide g4 is-clickable" data-category="collage" data-title="Photo Collage" data-size="A3">
         <img src="assets/hero_collage_print.png" alt="Photo Collage" class="gallery-img">
         <div class="gallery-overlay">
           <div class="gallery-overlay-text">Photo Collage · A3</div>
         </div>
       </div>
-      <div class="gallery-item g5">
-        <img src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80"
+      <div class="gallery-item g5 is-clickable" data-category="quote" data-title="Quote Combo" data-size="A4">
+        <img src="assets/8ab6acfcee1b3724525ddfc0951f3441.jpg"
           alt="Quote Combo" class="gallery-img">
         <div class="gallery-overlay">
           <div class="gallery-overlay-text">Quote Combo · A4</div>
         </div>
       </div>
-      <div class="gallery-item g6">
-        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80"
+      <div class="gallery-item g6 is-clickable" data-category="art" data-title="City Art" data-size="A4">
+        <img src="assets/373de9b3e2a72262777e41321be5a815.jpg"
           alt="City Art" class="gallery-img">
         <div class="gallery-overlay">
           <div class="gallery-overlay-text">City Art · A4</div>
         </div>
       </div>
-      <div class="gallery-item g7">
-        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=80"
+      <div class="gallery-item g7 is-clickable" data-category="art" data-title="Minimal Print" data-size="A4">
+        <img src="assets/a8463f1ca432d930be91fa16d6dd94fb.jpg"
           alt="Minimal Print" class="gallery-img">
         <div class="gallery-overlay">
           <div class="gallery-overlay-text">Minimal Print · A4</div>
         </div>
       </div>
-      <div class="gallery-item g8">
-        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+      <div class="gallery-item g8 is-clickable" data-category="personal" data-title="Gold Edition Portrait"
+        data-size="A4">
+        <img src="assets/91d29970d6b69d0a6e300f7b755865e8.jpg"
           alt="Gold Edition" class="gallery-img">
         <div class="gallery-overlay">
           <div class="gallery-overlay-text">Gold Edition · A4</div>
         </div>
       </div>
+      <div class="gallery-item is-clickable" data-category="personal" data-title="Lifestyle Memory Frame" data-size="A4">
+        <img src="assets/04dcb5110dee60205ba821eecd9b59b5.jpg" alt="Lifestyle Memory Frame" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Lifestyle Memory · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="quote" data-title="Daily Motivation Piece" data-size="A4">
+        <img src="assets/500c3a3c9ddbc02f76a4b5a0a8c936d8.jpg" alt="Daily Motivation Frame" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Motivation Quote · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="personal" data-title="Portrait Statement Frame"
+        data-size="A3">
+        <img src="assets/c561aa1bdf644e0065f020c2d7aefeaf.jpg" alt="Portrait Statement Frame" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Portrait Statement · A3</div>
+        </div>
+      </div>
+      <div class="gallery-item wide is-clickable" data-category="collage" data-title="Friends Collage Collection"
+        data-size="A3">
+        <img src="assets/ed9680594a2f58aaade396e421ff849c.jpg" alt="Friends Collage Collection" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Friends Collage · A3</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="personal" data-title="Portrait Mood Frame"
+        data-size="A4">
+        <img src="assets/1bb08fd13fbb0ca5de34a6daecb13981.jpg" alt="Portrait Mood Frame" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Portrait Mood · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="art" data-title="Studio Art Wall Frame" data-size="A4">
+        <img src="assets/ee376026ef891038aaee9f0b0d0143ca.jpg" alt="Studio Art Wall Frame" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Studio Wall Art · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="quote" data-title="Affirmation Quote Frame" data-size="A4">
+        <img src="assets/b1b031e8a570f259b148648fb8b25c6f.jpg" alt="Affirmation Quote Frame" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Affirmation Quote · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item wide is-clickable" data-category="collage" data-title="Friends Memory Collage"
+        data-size="A3">
+        <img src="assets/b0b7f81259d90e8c0b8f9e70ac58c695.jpg" alt="Friends Memory Collage" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Friends Memory Collage · A3</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="art" data-title="Neon Coastline Art" data-size="A4">
+        <img src="assets/43f42669e2f3515b1a304cc9db473c55.jpg" alt="Neon Coastline Art" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Neon Coastline · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="art" data-title="Acoustic Studio Print" data-size="A4">
+        <img src="assets/557c96484263125927cdb6134db817b4.jpg" alt="Acoustic Studio Print" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Acoustic Studio · A4</div>
+        </div>
+      </div>
+      <div class="gallery-item is-clickable" data-category="art" data-title="Modern Interior Frame Mockup" data-size="A4">
+        <img src="assets/e422ffe362303ce926bb7192395adf2f.jpg" alt="Modern Interior Frame Mockup" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">Interior Frame Mockup · A4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="inspo-strip">
+    <div class="strip-title reveal">
+      <small>More Inspiration</small>
+      <h3>Explore More Visual Styles For Your Next Frame</h3>
+    </div>
+    <div class="strip-viewport reveal">
+      <div class="strip-track" aria-label="Inspiration images">
+        <div class="strip-item"><img src="assets/ef91653c9125ff79d84a291f633f4ac0.jpg" alt="Inspiration rose print">
+        </div>
+        <div class="strip-item"><img src="assets/7bbea5b5408998ccbbfe5cf08aed80c1.jpg" alt="Inspiration nature print">
+        </div>
+        <div class="strip-item"><img src="assets/gallery_sunset.png" alt="Inspiration sunset print"></div>
+        <div class="strip-item"><img src="assets/df4103ba9cb4f2187c3eaca5529a02b2.jpg" alt="Inspiration framed abstract">
+        </div>
+        <div class="strip-item"><img src="assets/hero_collage_print.png" alt="Inspiration collage print"></div>
+        <div class="strip-item"><img src="assets/hero_photo_portrait.png" alt="Inspiration portrait print"></div>
+        <div class="strip-item"><img src="assets/04dcb5110dee60205ba821eecd9b59b5.jpg" alt="Inspiration lifestyle memory">
+        </div>
+        <div class="strip-item"><img src="assets/1d29abb7786428fdcc046565ee985eeb.jpg" alt="Inspiration style sample">
+        </div>
+        <div class="strip-item"><img src="assets/2d4c8c3c289084948166f6c052c326fc.jpg" alt="Inspiration mood frame">
+        </div>
+        <div class="strip-item"><img src="assets/e5c1674e6526cc385e3d582e7edc0557.jpg" alt="Inspiration portrait sample">
+        </div>
+        <div class="strip-item"><img src="assets/ed9680594a2f58aaade396e421ff849c.jpg" alt="Inspiration modern frame">
+        </div>
+        <div class="strip-item"><img src="assets/500c3a3c9ddbc02f76a4b5a0a8c936d8.jpg" alt="Inspiration quote frame">
+        </div>
+        <div class="strip-item"><img src="assets/43f42669e2f3515b1a304cc9db473c55.jpg" alt="Inspiration neon coastline">
+        </div>
+        <div class="strip-item"><img src="assets/557c96484263125927cdb6134db817b4.jpg" alt="Inspiration guitar art">
+        </div>
+        <div class="strip-item"><img src="assets/e422ffe362303ce926bb7192395adf2f.jpg" alt="Inspiration interior frame">
+        </div>
+
+        <div class="strip-item"><img src="assets/ef91653c9125ff79d84a291f633f4ac0.jpg"
+            alt="Inspiration rose print repeat"></div>
+        <div class="strip-item"><img src="assets/7bbea5b5408998ccbbfe5cf08aed80c1.jpg"
+            alt="Inspiration nature print repeat"></div>
+        <div class="strip-item"><img src="assets/gallery_sunset.png" alt="Inspiration sunset print repeat"></div>
+        <div class="strip-item"><img src="assets/df4103ba9cb4f2187c3eaca5529a02b2.jpg"
+            alt="Inspiration framed abstract repeat">
+        </div>
+        <div class="strip-item"><img src="assets/hero_collage_print.png" alt="Inspiration collage print repeat"></div>
+        <div class="strip-item"><img src="assets/hero_photo_portrait.png" alt="Inspiration portrait print repeat"></div>
+        <div class="strip-item"><img src="assets/04dcb5110dee60205ba821eecd9b59b5.jpg"
+            alt="Inspiration lifestyle memory repeat"></div>
+        <div class="strip-item"><img src="assets/1d29abb7786428fdcc046565ee985eeb.jpg"
+            alt="Inspiration style sample repeat"></div>
+        <div class="strip-item"><img src="assets/2d4c8c3c289084948166f6c052c326fc.jpg"
+            alt="Inspiration mood frame repeat"></div>
+        <div class="strip-item"><img src="assets/e5c1674e6526cc385e3d582e7edc0557.jpg"
+            alt="Inspiration portrait sample repeat"></div>
+        <div class="strip-item"><img src="assets/ed9680594a2f58aaade396e421ff849c.jpg"
+            alt="Inspiration modern frame repeat"></div>
+        <div class="strip-item"><img src="assets/500c3a3c9ddbc02f76a4b5a0a8c936d8.jpg"
+            alt="Inspiration quote frame repeat"></div>
+        <div class="strip-item"><img src="assets/43f42669e2f3515b1a304cc9db473c55.jpg"
+            alt="Inspiration neon coastline repeat"></div>
+        <div class="strip-item"><img src="assets/557c96484263125927cdb6134db817b4.jpg"
+            alt="Inspiration guitar art repeat"></div>
+        <div class="strip-item"><img src="assets/e422ffe362303ce926bb7192395adf2f.jpg"
+            alt="Inspiration interior frame repeat"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="reveal" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">
+        <div class="section-tag-line"></div><span>Quality Preview</span>
+      </div>
+      <h2 class="section-title">From Photo to <em>Premium Frame</em></h2>
+      <p class="section-sub" style="margin:0 auto">Drag the slider to compare a raw photo and the final framed result.
+        This is how we elevate your memories.</p>
+    </div>
+    <div class="compare-wrap reveal">
+      <div class="compare-stage" id="compare-stage">
+        <div class="compare-base">
+          <img src="assets/c561aa1bdf644e0065f020c2d7aefeaf.jpg" alt="Original image before framing">
+        </div>
+        <div class="compare-top" id="compare-top">
+          <img src="assets/c561aa1bdf644e0065f020c2d7aefeaf.jpg" alt="Enhanced image after framing">
+        </div>
+        <input id="compare-range" class="compare-range" type="range" min="0" max="100" value="50"
+          aria-label="Compare before and after">
+        <div class="compare-handle" id="compare-handle"></div>
+        <div class="compare-labels">
+          <span>Before</span>
+          <span>After</span>
+        </div>
+      </div>
+      <aside class="compare-note">
+        <h4>Designed for Every Space</h4>
+        <p>We optimize every image for print clarity, color depth, and framing balance so your wall looks clean and
+          intentional, not random.</p>
+        <ul class="compare-points">
+          <li>Color correction and brightness balancing</li>
+          <li>Lamination for durability and shine</li>
+          <li>Frame style matched to your interior mood</li>
+          <li>Fast delivery for homes, offices, events, and gifts</li>
+        </ul>
+        <div class="compare-mini-grid">
+          <div class="compare-mini-card">
+            <img src="assets/ef91653c9125ff79d84a291f633f4ac0.jpg" alt="Framed sunset artwork">
+            <span>Final Framed Look</span>
+          </div>
+          <div class="compare-mini-card">
+            <img src="assets/e422ffe362303ce926bb7192395adf2f.jpg" alt="Styled interior frame sample">
+            <span>Room Styling Mockup</span>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -2149,7 +2816,7 @@
           <li>Premium photo paper</li>
           <li>Laminated finish</li>
           <li>Elegant A4 frame</li>
-          <li>Campus delivery</li>
+          <li>Doorstep delivery available</li>
         </ul>
         <a href="#order" class="price-btn price-btn-outline">Order Now</a>
       </div>
@@ -2163,7 +2830,7 @@
           <li>Enhanced &amp; colour-corrected</li>
           <li>Laminated finish</li>
           <li>Elegant A4 frame</li>
-          <li>Campus delivery</li>
+          <li>Doorstep delivery available</li>
         </ul>
         <a href="#order" class="price-btn price-btn-fill">Order Now</a>
       </div>
@@ -2177,7 +2844,7 @@
           <li>Custom layout design</li>
           <li>Laminated finish</li>
           <li>Large A3 frame</li>
-          <li>Campus delivery</li>
+          <li>Doorstep delivery available</li>
         </ul>
         <a href="#order" class="price-btn price-btn-outline">Order Now</a>
       </div>
@@ -2191,7 +2858,7 @@
           <li>Beautiful typography</li>
           <li>Laminated finish</li>
           <li>Elegant A4 frame</li>
-          <li>Campus delivery</li>
+          <li>Doorstep delivery available</li>
         </ul>
         <a href="#order" class="price-btn price-btn-outline">Order Now</a>
       </div>
@@ -2217,7 +2884,7 @@
           <div class="author-avatar">A</div>
           <div>
             <div class="author-name">Abena K.</div>
-            <div class="author-info">Level 300 · Business School</div>
+            <div class="author-info">Interior Styling Client · Accra</div>
           </div>
         </div>
       </div>
@@ -2231,7 +2898,7 @@
           <div class="author-avatar">K</div>
           <div>
             <div class="author-name">Kofi M.</div>
-            <div class="author-info">Level 200 · Engineering</div>
+            <div class="author-info">Birthday Gift Order · Tema</div>
           </div>
         </div>
       </div>
@@ -2245,7 +2912,7 @@
           <div class="author-avatar">E</div>
           <div>
             <div class="author-name">Efua A.</div>
-            <div class="author-info">Level 400 · Social Sciences</div>
+            <div class="author-info">Family Collage Order · Kumasi</div>
           </div>
         </div>
       </div>
@@ -2259,7 +2926,7 @@
       <p class="order-sub">Order in minutes via WhatsApp. No complicated forms, no waiting — just send us a message and
         we'll handle the rest.</p>
       <div class="order-actions">
-        <a href="https://wa.me/233XXXXXXXXX?text=Hello%20FrameItGh!%20I'd%20like%20to%20order%20a%20frame."
+        <a href="https://wa.me/233592718321?text=Hello%20FrameItGh!%20I'd%20like%20to%20order%20a%20frame."
           class="whatsapp-btn" target="_blank">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path
@@ -2267,7 +2934,8 @@
           </svg>
           Order on WhatsApp
         </a>
-        <a href="mailto:frameitgh@gmail.com" class="btn-secondary">📧 Email Us</a>
+        <a href="mailto:frameitgh@gmail.com?subject=FrameItGh%20Order%20Inquiry&body=Hello%20FrameItGh%2C%0A%0AI%20would%20like%20to%20place%20an%20order.%20Please%20share%20the%20next%20steps."
+          class="btn-secondary">📧 Email Us</a>
       </div>
     </div>
   </section>
@@ -2277,7 +2945,7 @@
     <div class="footer-top">
       <div>
         <a href="#" class="footer-logo">Frame<span>ItGh</span></a>
-        <p class="footer-about">Ghana's favourite campus art studio. We turn your memories and favourite art into
+        <p class="footer-about">Ghana's favourite frame studio. We turn your memories and favourite art into
           stunning framed pieces — delivered right to your door.</p>
       </div>
       <div>
@@ -2303,20 +2971,29 @@
         <ul class="footer-links">
           <li><a href="#">WhatsApp Us</a></li>
           <li><a href="#">Instagram</a></li>
-          <li><a href="#">Email Us</a></li>
-          <li><a href="#">Campus Delivery</a></li>
+          <li><a
+              href="mailto:frameitgh@gmail.com?subject=FrameItGh%20General%20Inquiry&body=Hello%20FrameItGh%2C%0A%0AI%20would%20like%20to%20ask%20about%20your%20framing%20services.">Email
+              Us</a></li>
+          <li><a href="#">Nationwide Delivery</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p class="footer-copy">© 2025 <strong>FrameItGh</strong>. All rights reserved. Crafted with ❤️ in Ghana.</p>
-      <div class="footer-social">
-        <a href="#" class="social-link" title="Instagram">📸</a>
-        <a href="#" class="social-link" title="WhatsApp">💬</a>
-        <a href="#" class="social-link" title="TikTok">🎵</a>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Gallery image viewer">
+      <button class="lightbox-btn lightbox-prev" id="lightbox-prev" aria-label="Previous image">←</button>
+      <button class="lightbox-btn lightbox-next" id="lightbox-next" aria-label="Next image">→</button>
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close viewer">✕</button>
+      <div class="lightbox-image-wrap">
+        <img id="lightbox-image" class="lightbox-image" src="" alt="Selected gallery image">
+      </div>
+      <div class="lightbox-meta">
+        <div id="lightbox-caption" class="lightbox-caption">Gallery Image</div>
+        <div id="lightbox-count" class="lightbox-count">1 / 1</div>
       </div>
     </div>
-  </footer>
+  </div>
 
   <script>
     // Custom cursor
@@ -2398,10 +3075,125 @@
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
-        const target = document.querySelector(a.getAttribute('href'));
+        const href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        const target = document.querySelector(href);
         if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       });
     });
+
+    // Gallery filters
+    const galleryFilters = document.querySelectorAll('.gallery-filter');
+    const galleryItems = document.querySelectorAll('#gallery-wall .gallery-item');
+
+    galleryFilters.forEach(filterBtn => {
+      filterBtn.addEventListener('click', () => {
+        galleryFilters.forEach(btn => btn.classList.remove('active'));
+        filterBtn.classList.add('active');
+
+        const currentFilter = filterBtn.getAttribute('data-filter');
+        galleryItems.forEach(item => {
+          const category = item.getAttribute('data-category');
+          const shouldShow = currentFilter === 'all' || category === currentFilter;
+          item.classList.toggle('hidden', !shouldShow);
+        });
+      });
+    });
+
+    // Gallery lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxCount = document.getElementById('lightbox-count');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
+
+    let visibleGalleryItems = [];
+    let activeGalleryIndex = 0;
+
+    function getVisibleGalleryItems() {
+      return Array.from(document.querySelectorAll('#gallery-wall .gallery-item')).filter(item => !item.classList.contains('hidden'));
+    }
+
+    function updateLightboxView(index) {
+      visibleGalleryItems = getVisibleGalleryItems();
+      if (!visibleGalleryItems.length) return;
+
+      activeGalleryIndex = (index + visibleGalleryItems.length) % visibleGalleryItems.length;
+      const activeItem = visibleGalleryItems[activeGalleryIndex];
+      const img = activeItem.querySelector('img');
+      const title = activeItem.getAttribute('data-title') || img.alt || 'Framed Artwork';
+      const size = activeItem.getAttribute('data-size') || '';
+
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt || title;
+      lightboxCaption.textContent = size ? `${title} · ${size}` : title;
+      lightboxCount.textContent = `${activeGalleryIndex + 1} / ${visibleGalleryItems.length}`;
+    }
+
+    function openLightboxFromItem(item) {
+      visibleGalleryItems = getVisibleGalleryItems();
+      activeGalleryIndex = visibleGalleryItems.indexOf(item);
+      if (activeGalleryIndex < 0) activeGalleryIndex = 0;
+      updateLightboxView(activeGalleryIndex);
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    galleryItems.forEach(item => {
+      item.addEventListener('click', () => openLightboxFromItem(item));
+    });
+
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener('click', () => updateLightboxView(activeGalleryIndex - 1));
+    }
+    if (lightboxNext) {
+      lightboxNext.addEventListener('click', () => updateLightboxView(activeGalleryIndex + 1));
+    }
+    if (lightboxClose) {
+      lightboxClose.addEventListener('click', closeLightbox);
+    }
+    if (lightbox) {
+      lightbox.addEventListener('click', e => {
+        if (e.target === lightbox) closeLightbox();
+      });
+    }
+
+    document.addEventListener('keydown', e => {
+      if (!lightbox) return;
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') updateLightboxView(activeGalleryIndex + 1);
+      if (e.key === 'ArrowLeft') updateLightboxView(activeGalleryIndex - 1);
+    });
+
+    // Before/after compare slider
+    const compareRange = document.getElementById('compare-range');
+    const compareStage = document.getElementById('compare-stage');
+    const compareTop = document.getElementById('compare-top');
+    const compareHandle = document.getElementById('compare-handle');
+
+    function syncCompare(value) {
+      const safeValue = Math.min(100, Math.max(0, value));
+      if (compareStage) compareStage.style.setProperty('--compare-pos', safeValue + '%');
+      if (compareTop) compareTop.style.clipPath = `inset(0 calc(100% - ${safeValue}%) 0 0)`;
+      if (compareHandle) compareHandle.style.left = safeValue + '%';
+    }
+
+    if (compareRange) {
+      compareRange.addEventListener('input', e => {
+        syncCompare(parseInt(e.target.value, 10));
+      });
+      syncCompare(parseInt(compareRange.value, 10));
+    }
 
     // ── INTERACTIVE CUSTOMIZER LOGIC ──
     const customizerUpload = document.getElementById('customizer-upload');
@@ -2412,7 +3204,7 @@
     const priceVal = document.getElementById('price-val');
     const customizerOrderBtn = document.getElementById('customizer-order-btn');
 
-    let currentArtName = "Abstract Painting";
+    let currentArtName = "Tropical Sunset Art";
     let currentFrameStyle = "Luxury Gold";
     let currentSize = "A4 (Standard)";
     let basePrice = 80;
@@ -2510,7 +3302,7 @@
         `I'd like to proceed with my order!`;
 
       if (customizerOrderBtn) {
-        customizerOrderBtn.href = `https://wa.me/233592718321=${encodeURIComponent(textMessage)}`;
+        customizerOrderBtn.href = `https://wa.me/233592718321?text=${encodeURIComponent(textMessage)}`;
       }
     }
 
