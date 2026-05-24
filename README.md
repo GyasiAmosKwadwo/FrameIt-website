@@ -30,7 +30,7 @@ cd /Users/mac/Desktop/website
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000/FrameIt_Website.html` in your browser.
+Then open `http://localhost:8000/FrameIt_Website.html` in your browser
 
 ## Notes
 
